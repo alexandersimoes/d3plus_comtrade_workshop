@@ -1,1 +1,1 @@
-# d3plus_comtrade_workshop
+# D3plus COMTRADE Workshop
