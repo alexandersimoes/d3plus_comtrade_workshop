@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+ 
+<head>
+  <meta charset="utf-8">
+  <title>Single Variable Visualizations: Pie Chart</title>
+ 
+  <!-- load D3js -->
+  <script src="/js/d3.js"></script>
+ 
+  <!-- load D3plus after D3js -->
+  <script src="/js/d3plus.js"></script>
+</head>
+ 
+<body>
+  <div id="viz"></div>
+  
+  <script>
+    
+  // sample data array
+  var sample_data = [
+    {"value": 100, "name": "alpha"},
+    {"value": 70, "name": "beta"},
+    {"value": 40, "name": "gamma"},
+    {"value": 15, "name": "delta"},
+    {"value": 5, "name": "epsilon"},
+    {"value": 1, "name": "zeta"}
+  ]
+  
+  // instantiate d3plus
+  var visualization = d3plus.viz()
+    .container("#viz")  // container DIV to hold the visualization
+    .data(sample_data)  // data to use with the visualization
+    .type("pie")        // visualization type
+    .id("name")         // key for which our data is unique on
+    .size("value")      // sizing of blocks
+    .text("name")       // explicitly set text for labels
+    .draw()             // finally, draw the visualization!
+  
+  // trying typing the following into your browser's console after page load:
+  //
+  // visualization.type("tree_map").draw();
+  // sample_data.push({"value": 135, "name": "theta"});
+  // visualization.type("pie").draw();
+  
+  </script>
+</body>
