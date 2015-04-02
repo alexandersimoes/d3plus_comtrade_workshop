@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+ 
+<head>
+  <meta charset="utf-8">
+  <title>COMTRADE: Tree Map of UK Exports in 2013</title>
+ 
+  <!-- load D3js -->
+  <script src="/js/d3.js"></script>
+  
+  <!-- load D3plus after D3js -->
+  <script src="/js/d3plus.js"></script>
+</head>
+ 
+<body>
+  <div id="viz"></div>
+  
+  <script>
+  
+  d3.json("http://atlas.media.mit.edu/attr/hs/en/", function(attrs){
+    
+    attrs_lookup = {}
+    attrs.data.forEach(function(a){
+      if(a["display_id"]){
+        attrs_lookup[a["display_id"]] = a;
+      }
+    })
+    
+    d3.json("http://comtrade.un.org/api/get?r=826&freq=A&ps=2013&px=H0&p=0&rg=2&cc=AG4&fmt=json&max=50000&type=C&head=M", function(err, data){
+    
+      data.dataset.forEach(function(d){
+        d["hs2"] = d["cmdCode"].substr(0, 2);
+        d["color"] = attrs_lookup[d["cmdCode"]]["color"]
+        d["hs_section"] = attrs_lookup[d["cmdCode"]]["id"].substr(0, 2);
+      })
+      
+      console.log(data.dataset[0])
+    
+      // instantiate d3plus
+      var visualization = d3plus.viz()
+        .container("#viz")
+        .data(data.dataset)
+        .type("tree_map")
+        .id(["hs_section", "hs2", "cmdCode"])
+        .text("cmdDescE")
+        .size("TradeValue")
+        .size({"threshold": false})
+        .color("color")
+        .depth(1)
+        .draw()
+    
+    })
+  })
+  
+  
+  </script>
+</body>
