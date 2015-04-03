@@ -3,7 +3,7 @@
  
 <head>
   <meta charset="utf-8">
-  <title>COMTRADE: Tree Map of UK Exports in 2013</title>
+  <title>COMTRADE: Geo Map of UK Exports in 2013</title>
  
   <!-- load D3js -->
   <script src="/js/d3.js"></script>
@@ -32,74 +32,9 @@
   
   <script>
   
-  var country_lookup = {};
-  var visualization;
-  var horses = "0101"
-  
-  d3.json("http://atlas.media.mit.edu/attr/hs/en/", function(prods){
-    
-    var dropdown = d3plus.form()
-      .container("#controls")
-      .data(prods.data)
-      .id("display_id")
-      .text("name")
-      .title("Select Product")
-      .type("drop")
-      .icon(false)
-      .focus(horses, function(country_id){
-        visualization.error("Loading Data...").draw();
-        make_viz(country_id);
-      })
-      .draw()
-  
-    d3.json("http://atlas.media.mit.edu/attr/country/en/", function(countries){
-      
-      countries.data.forEach(function(country){
-        if(country["display_id"]){
-          country_lookup[country["display_id"]] = country;
-        }
-      })
-      
-      make_viz(horses)
-    
-    })
-  })
-  
-  function make_viz(prod_id){
-    console.log(prod_id)
-    
-    d3.json("http://comtrade.un.org/api/get?r=ALL&freq=A&ps=2013&px=H0&p=0&rg=2&cc="+prod_id+"&fmt=json&max=50000&type=C&head=M", function(err, data){
-  
-      data.dataset.forEach(function(d){
-        // d["hs2"] = d["cmdCode"].substr(0, 2);
-        // d["color"] = attrs_lookup[d["cmdCode"]]["color"]
-        // d["hs_section"] = attrs_lookup[d["cmdCode"]]["id"].substr(0, 2);
-        if(d["rt3ISO"] && country_lookup[d["rt3ISO"].toLowerCase()]){
-          d["country_id"] = country_lookup[d["rt3ISO"].toLowerCase()]["id"]
-          d["country_name"] = country_lookup[d["rt3ISO"].toLowerCase()]["name"]
-          if(d["rt3ISO"] == "RUS"){
-            console.log(d, d["rt3ISO"].toLowerCase(), country_lookup[d["rt3ISO"].toLowerCase()])
-          }
-        }
-      })
-    
-      console.log(data.dataset[0])
-  
-      // instantiate d3plus
-      visualization = d3plus.viz()
-        .container("#viz")
-        .data(data.dataset)
-        .coords("/js/countries.json")
-        .type("geo_map")
-        .id("country_id")
-        .text("country_name")
-        .color("TradeValue")
-        .tooltip("value")
-        .draw()                      
-  
-    })
-  }
-  
+  // Step 1: Create a geo map of places colored by their export value
+  // of a specific product also present the user with a dropdown of
+  // products for them to choose from.
   
   </script>
 </body>

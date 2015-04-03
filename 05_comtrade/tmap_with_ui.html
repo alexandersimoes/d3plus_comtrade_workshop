@@ -28,66 +28,12 @@
   
   <script>
   
-  var attrs_lookup = {};
-  var visualization;
+  // Step 1: Create a list of countries in a dropdown menu to allow the
+  // user to switch between them.
+  // -- use the OEC API - http://atlas.media.mit.edu/attr/country/en/
   
-  d3.json("http://atlas.media.mit.edu/attr/country/en/", function(countries){
-    var dropdown = d3plus.form()
-      .container("#controls")
-      .data(countries.data)
-      .id("id_num")
-      .text("name")
-      .title("Select Country")
-      .type("drop")
-      .icon(false)
-      .focus("826", function(country_id){
-        visualization.error("Loading Data...").draw();
-        make_viz(country_id);
-      })
-      .draw()
-  
-    d3.json("http://atlas.media.mit.edu/attr/hs/en/", function(attrs){
-      
-      attrs.data.forEach(function(a){
-        if(a["display_id"]){
-          attrs_lookup[a["display_id"]] = a;
-        }
-      })
-      
-      var uk_country_code = 826
-      make_viz(uk_country_code)
-    
-    })
-  })
-  
-  function make_viz(country_id){
-    d3.json("http://comtrade.un.org/api/get?r="+country_id+"&freq=A&ps=2009,2010,2011,2012,2013&px=H0&p=0&rg=2&cc=AG4&fmt=json&max=50000&type=C&head=M", function(err, data){
-  
-      data.dataset.forEach(function(d){
-        d["hs2"] = d["cmdCode"].substr(0, 2);
-        d["color"] = attrs_lookup[d["cmdCode"]]["color"]
-        d["hs_section"] = attrs_lookup[d["cmdCode"]]["id"].substr(0, 2);
-      })
-    
-      console.log(data.dataset[0])
-  
-      // instantiate d3plus
-      visualization = d3plus.viz()
-        .container("#viz")
-        .data(data.dataset)
-        .type("tree_map")
-        .id(["hs_section", "hs2", "cmdCode"])
-        .text("cmdDescE")
-        .size("TradeValue")
-        .size({"threshold": false})
-        .color("color")
-        .depth(2)
-        .time({"value": "period", "solo": 2012})
-        .draw()
-  
-    })
-  }
-  
+  // Step 2: Create a timeline UI element
+  // -- what will be the API call to fetch multiple years of data?
   
   </script>
 </body>
