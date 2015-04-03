@@ -28,16 +28,19 @@
   ]
   
   // instantiate d3plus
-  var visualization = d3plus.viz()
-    .container("#viz")  // container DIV to hold the visualization
-    .data(sample_data)  // data to use with the visualization
-    .type("pie")        // visualization type
-    .id("name")         // key for which our data is unique on
-    .size("value")      // sizing of blocks
-    .text("name")       // explicitly set text for labels
-    .draw()             // finally, draw the visualization!
+  var visualization = d3plus.viz();
   
-  // trying typing the following into your browser's console after page load:
+  // Step 1: Create a pie chart
+  // Need to tell d3plus the following:
+  // -- the container HTML element to put your visualizaiton
+  // -- your data (hint look above :-) )
+  // -- the type of visualization you want to make
+  // -- the ID of your data aka the unique key
+  // -- the key in your data used to size the wedges
+  // -- they key in your data to use for a label
+  
+  // Step 2: Modifying your viz in the browser
+  // Trying typing the following into your browser's console after page load:
   //
   // visualization.type("tree_map").draw();
   // sample_data.push({"value": 135, "name": "theta"});
