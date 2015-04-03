@@ -17,7 +17,8 @@
   
   <script>
   
-  d3.json("http://atlas.media.mit.edu/attr/hs/en/", function(attrs){
+  d3.json("http://atlas.media.mit.edu/attr/hs/en/", function(err, attrs){
+    if (err) return console.warn(err);
     
     attrs_lookup = {}
     attrs.data.forEach(function(a){
@@ -27,6 +28,7 @@
     })
     
     d3.json("http://comtrade.un.org/api/get?r=826&freq=A&ps=2013&px=H0&p=0&rg=2&cc=AG4&fmt=json&max=50000&type=C&head=M", function(err, data){
+      if (err) return console.warn(err);
     
       data.dataset.forEach(function(d){
         d["hs2"] = d["cmdCode"].substr(0, 2);
@@ -46,7 +48,7 @@
         .size("TradeValue")
         .size({"threshold": false})
         .color("color")
-        .depth(1)
+        .depth(2)
         .draw()
     
     })

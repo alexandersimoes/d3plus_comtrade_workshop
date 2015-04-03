@@ -10,15 +10,179 @@
   
   <!-- load D3plus after D3js -->
   <script src="/js/d3plus.js"></script>
+  
+  <style>
+  #api {
+    margin: auto;
+    width: 1200px;
+  }
+  select {
+    width: 200px;
+  }
+  table {
+    margin: 10px 0 40px 0;
+  }
+  table td, table th {
+    padding: 4px;
+    margin: 2px;
+    text-align: left;
+  }
+  input {
+    width: 800px;
+  }
+  </style>
 </head>
  
 <body>
-  <div id="viz"></div>
+  <div id="api">
+    <p>http://comtrade.un.org/api/get?parameters</p>
+    <table>
+      <tr>
+        <th>Frequency</th>
+        <td>freq</td>
+        <td>
+          <select class="freq">
+            <option value="A">A - Annual</option>
+            <option value="M">M - Monthly</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>Reporter</th>
+        <td>r</td>
+        <td>
+          <select class="reporter"></select>
+        </td>
+      </tr>
+      <tr>
+        <th>Time</th>
+        <td>ps</td>
+        <td>
+          <select class="time"></select>
+        </td>
+      </tr>
+      <tr>
+        <th>Classification</th>
+        <td>px</td>
+        <td>
+          <select class="classification"></select>
+        </td>
+      </tr>
+      <tr>
+        <th>Partner</th>
+        <td>p</td>
+        <td>
+          <select class="partner"></select>
+        </td>
+      </tr>
+      <tr>
+        <th>Trade Flow</th>
+        <td>rg</td>
+        <td>
+          <select class="trade_flow">
+            <option value="all">all - All</option>
+            <option value="1">1 - Import</option>
+            <option value="2">2 - Export</option>
+            <option value="3">3 - re-Export</option>
+            <option value="4">4 - re-Import</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>Product</th>
+        <td>cc</td>
+        <td>
+          <select class="product"></select>
+        </td>
+      </tr>
+    </table>
+
+    <button>Get URL</button>
+    <input value="http://comtrade.un.org/api/get?r=all&freq=A&ps=now&px=H0&p=0&rg=2&cc=AG4&fmt=json&max=50000&type=C&head=M"></input>
+    <p>
+      <a href="http://comtrade.un.org/data/doc/api/">COMTRADE API documentation</a>
+    </p>
+  </div>
   
   <script>
   
-  // documentation here:
-  // http://comtrade.un.org/data/doc/api/
+  d3.json("json/reporterAreas.json", function(err, data){
+    d3.select("select.reporter").selectAll("option").data(data.results)
+      .enter()
+      .append("option")
+      .attr("value", function(d){
+        return d["id"]
+      })
+      .text(function(d){
+        return d["id"] + " - " + d["text"];
+      })
+  })
+  
+  var years = ["now", "recent"].concat(d3.range(1962, 2014).reverse());
+  d3.select("select.time").selectAll("option").data(years)
+    .enter()
+    .append("option")
+    .attr("value", function(d){ return d})
+    .text(function(d){ return d})
+  
+  var classifications = [
+    {"id": "HS", "text": "Harmonized System (HS)"},
+    {"id": "H0", "text": "HS 1992"},
+    {"id": "H1", "text": "HS 1996"},
+    {"id": "H2", "text": "HS 2002"},
+    {"id": "H3", "text": "HS 2007"},
+    {"id": "H4", "text": "HS 2012"},
+    {"id": "ST", "text": "Standard International Trade Classification (SITC)"},
+    {"id": "S1", "text": "SITC revision 1"},
+    {"id": "S2", "text": "SITC revision 2"},
+    {"id": "S3", "text": "SITC revision 3"},
+    {"id": "S4", "text": "SITC revision 4"},
+    {"id": "BEC", "text": "Broad Economic Categories"}
+  ]
+  d3.select("select.classification").selectAll("option").data(classifications)
+    .enter()
+    .append("option")
+    .attr("value", function(d){
+      return d["id"]
+    })
+    .text(function(d){
+      return d["id"] + " - " + d["text"];
+    })
+  
+  d3.json("json/partnerAreas.json", function(err, data){
+    d3.select("select.partner").selectAll("option").data(data.results)
+      .enter()
+      .append("option")
+      .attr("value", function(d){
+        return d["id"]
+      })
+      .text(function(d){
+        return d["id"] + " - " + d["text"];
+      })
+  })
+  
+  d3.json("json/classificationH0.json", function(err, data){
+    d3.select("select.product").selectAll("option").data(data.results)
+      .enter()
+      .append("option")
+      .attr("value", function(d){
+        return d["id"]
+      })
+      .text(function(d){
+        return d["text"];
+      })
+  })
+  
+  d3.select("button").on("click", function(){
+    var url = "http://comtrade.un.org/api/get?fmt=json&max=50000&type=C&head=M"
+    d3.selectAll("table tr").each(function(){
+      var tds = d3.select(this).selectAll("td")[0]
+      var id = d3.select(tds[0]).text()
+      var val = d3.select(tds[1]).select("select").property("value")
+      url += "&"+id+"="+val;
+    })
+    d3.select("input").property("value", url);
+  })
   
   // products exported by the United Kingdom in 2013
   // http://comtrade.un.org/api/get?r=826&freq=A&ps=2013&px=H0&p=0&rg=2&cc=AG4&fmt=json&max=50000&type=C&head=M
