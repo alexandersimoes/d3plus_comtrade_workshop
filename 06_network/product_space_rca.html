@@ -3,7 +3,7 @@
  
 <head>
   <meta charset="utf-8">
-  <title>COMTRADE: Tree Map of UK Exports in 2013</title>
+  <title>COMTRADE: Product Space of UK Exports in 2013</title>
  
   <!-- load D3js -->
   <script src="/js/d3.js"></script>
@@ -29,83 +29,12 @@
   <script>
   
   var uk_country_code = 826;
-  var attrs_lookup = {};
-  var wld_trade = {};
-  var wld_trade_total = 0;
-  var visualization, nodes, edges;
   
-  d3.json("http://atlas.media.mit.edu/attr/country/en/", function(countries){
-    var dropdown = d3plus.form()
-      .container("#controls")
-      .data(countries.data)
-      .id("id_num")
-      .text("name")
-      .title("Select Country")
-      .type("drop")
-      .icon(false)
-      .focus("826", function(country_id){
-        visualization.error("Loading Data...").draw();
-        make_viz(country_id);
-      })
-      .draw()
-  
-    d3.json("http://atlas.media.mit.edu/attr/hs/en/", function(attrs){
-      d3.json("json/network_hs.json", function(network){
-        nodes = network["nodes"]
-        edges = network["edges"]
-        
-        attrs.data.forEach(function(a){
-          if(a["display_id"]){
-            attrs_lookup[a["display_id"]] = a;
-          }
-        })
-        
-        d3.json("json/product_totals_2013.json", function(totals){
-          
-          totals.dataset.forEach(function(t){
-            wld_trade[t["cmdCode"]] = t
-            wld_trade_total += parseInt(t["TradeValue"])
-          })
-          
-          make_viz(uk_country_code)
-          
-        })
-      })
-    })
-  })
-  
-  function make_viz(country_id){
-    d3.json("http://comtrade.un.org/api/get?r="+country_id+"&freq=A&ps=2013&px=H0&p=0&rg=2&cc=AG4&fmt=json&max=50000&type=C&head=M", function(err, data){
-      
-      country_trade_total = d3.sum(data.dataset, function(d){ return d["TradeValue"]; })
-  
-      data.dataset.forEach(function(d){
-        d["hs2"] = d["cmdCode"].substr(0, 2);
-        d["color"] = attrs_lookup[d["cmdCode"]]["color"]
-        d["hs_section"] = attrs_lookup[d["cmdCode"]]["id"].substr(0, 2);
-        d["id"] = d["hs_section"] + d["cmdCode"];
-        d["wld_trade"] = wld_trade[d["cmdCode"]]["TradeValue"];
-        d["rca"] = (d["TradeValue"] / country_trade_total) / (d["wld_trade"] / wld_trade_total)
-      })
-    
-      console.log(data.dataset[0])
-  
-      // instantiate d3plus
-      visualization = d3plus.viz()
-        .container("#viz")
-        .type("network")
-        .data(data.dataset)
-        .nodes(nodes)
-        .edges(edges)
-        .color("color")
-        .size("wld_trade")
-        .id("id")
-        .active({"value": function(d){ return d["rca"] >= 1; }, "spotlight":true})
-        .draw()
-  
-    })
-  }
-  
+  // Step 1: Create the "Product Space", a network of products with a country's
+  // exports highlighted only if they have RCA > 1.
+  // -- if unfamiliar see the RCA calculation here: 
+  // https://en.wikipedia.org/wiki/The_Product_Space#Building_the_Product_Space
+  // -- you will need to use the json/product_totals_2013.json file
   
   </script>
 </body>
