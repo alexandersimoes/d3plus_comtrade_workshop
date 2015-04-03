@@ -25,20 +25,21 @@
     {"value": 2315987123, "country": "nausa", "name": "United States"},
     {"value": 38157121349, "country": "aschn", "name": "China"},
     {"value": 21891735098, "country": "euesp", "name": "Spain"},
-    {"value": 9807134982, "country": "sabra", "name": "Brazil"}
+    {"value": 9807134982, "country": "sabra", "name": "Brazil"},
+    {"value": 41891735098, "country": "eufra", "name": "France"},
+    {"value": 11891735098, "country": "euita", "name": "Italy"},
+    {"value": 9107134982, "country": "euprt", "name": "Portugal"}
   ]
-
-  // instantiate d3plus
-  var visualization = d3plus.viz()
-    .container("#viz")             // container DIV to hold the visualization
-    .data(sample_data)             // data to use with the visualization
-    .coords("/js/countries.json")  // pass topojson coordinates
-    .type("geo_map")               // visualization type
-    .id("country")                 // key for which our data is unique on
-    .text("name")                  // key to use for display text
-    .color("value")                // key for coloring countries
-    .tooltip("value")              // keys to place in tooltip
-    .draw()                        // finally, draw the visualization!
-    
+  
+  // Step 1: Create a geo map
+  // New things to tell d3plus:
+  // -- what are the coordinates for your geography?
+  // -- how will you color based on value?
+  
+  // Step 2: Create a cutom color scale
+  
+  // Step 3: Filter the coordinates so that only Italy, France, Spain and 
+  // Portugal are showing
+  
   </script>
 </body>

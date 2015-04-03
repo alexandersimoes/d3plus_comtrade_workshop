@@ -51,17 +51,15 @@
     {"source": "theta", "target": "gamma"},
     {"source": "eta", "target": "gamma"}
   ]
-
-  // instantiate d3plus
-  var visualization = d3plus.viz()
-    .container("#viz")  // container DIV to hold the visualization
-    .type("network")    // visualization type
-    .data(sample_data)  // sample dataset to attach to nodes
-    .nodes(positions)   // x and y position of nodes
-    .edges(connections) // list of node connections
-    .size("size")       // key to size the nodes
-    .id("name")         // key for which our data is unique on
-    .draw()             // finally, draw the visualization!
+  
+  // Step 1: Create a network
+  // New things to tell d3plus:
+  // -- what are your nodes?
+  // -- what are the edges?
+  // -- what variable will you use to set the size of your nodes?
+  
+  // Step 2: Directional network
+  // Set the edges to use arrows pointing from the source to the target nodes
   
   </script>
 </body>
