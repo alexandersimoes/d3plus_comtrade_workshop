@@ -30,7 +30,7 @@
   
   var attrs_lookup = {};
   var wld_trade = {};
-  var cutoff = 1000000000; // 1 billion
+  var wld_trade_total = 0;
   var visualization, nodes, edges;
   
   d3.json("http://atlas.media.mit.edu/attr/country/en/", function(countries){
@@ -52,28 +52,40 @@
       d3.json("json/network_hs.json", function(network){
         nodes = network["nodes"]
         edges = network["edges"]
-      
+        
         attrs.data.forEach(function(a){
           if(a["display_id"]){
             attrs_lookup[a["display_id"]] = a;
           }
         })
+        
+        d3.json("json/product_totals_2013.json", function(totals){
+          
+          totals.dataset.forEach(function(t){
+            wld_trade[t["cmdCode"]] = t
+            wld_trade_total += parseInt(t["TradeValue"])
+          })
       
-        var uk_country_code = 826
-        make_viz(uk_country_code)
-
-      })    
+          var uk_country_code = 826
+          make_viz(uk_country_code)
+          
+        })
+      })
     })
   })
   
   function make_viz(country_id){
     d3.json("http://comtrade.un.org/api/get?r="+country_id+"&freq=A&ps=2013&px=H0&p=0&rg=2&cc=AG4&fmt=json&max=50000&type=C&head=M", function(err, data){
+      
+      country_trade_total = d3.sum(data.dataset, function(d){ return d["TradeValue"]; })
   
       data.dataset.forEach(function(d){
         d["hs2"] = d["cmdCode"].substr(0, 2);
         d["color"] = attrs_lookup[d["cmdCode"]]["color"]
         d["hs_section"] = attrs_lookup[d["cmdCode"]]["id"].substr(0, 2);
         d["id"] = d["hs_section"] + d["cmdCode"];
+        d["wld_trade"] = wld_trade[d["cmdCode"]]["TradeValue"];
+        d["rca"] = (d["TradeValue"] / country_trade_total) / (d["wld_trade"] / wld_trade_total)
       })
     
       console.log(data.dataset[0])
@@ -83,12 +95,37 @@
         .container("#viz")
         .type("network")
         .data(data.dataset)
-        .nodes(nodes)
+        .nodes({
+          "value":nodes,
+          "overlap": 1.5
+        })
         .edges(edges)
         .color("color")
-        .size("TradeValue")
+        .size("wld_trade")
         .id("id")
-        .active({"value": function(d){ return d["TradeValue"] > cutoff; }, "spotlight":true})
+        .active({"value": function(d){ return d["rca"] >= 1; }, "spotlight":true})
+        .tooltip(["rca", "cmdDescE", "cmdCode"])
+        .text("cmdDescE")
+        .format({ "text" : function( text , key ) {
+
+            if (text === "rca") {
+              return "RCA";
+            }
+            else if (text === "cmdDescE") {
+              return "Product";
+            }
+            else if (text === "wld_trade") {
+              return "World Trade";
+            }
+            else if (text === "cmdCode") {
+              return "HS Code";
+            }
+            else {
+              return text.charAt(0).toUpperCase() + text.substr(1).toLowerCase();
+            }
+
+          }
+        })
         .draw()
   
     })
