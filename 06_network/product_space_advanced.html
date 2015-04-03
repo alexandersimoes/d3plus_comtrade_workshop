@@ -95,12 +95,37 @@
         .container("#viz")
         .type("network")
         .data(data.dataset)
-        .nodes(nodes)
+        .nodes({
+          "value":nodes,
+          "overlap": 1.5
+        })
         .edges(edges)
         .color("color")
         .size("wld_trade")
         .id("id")
         .active({"value": function(d){ return d["rca"] >= 1; }, "spotlight":true})
+        .tooltip(["rca", "cmdDescE", "cmdCode"])
+        .text("cmdDescE")
+        .format({ "text" : function( text , key ) {
+
+            if (text === "rca") {
+              return "RCA";
+            }
+            else if (text === "cmdDescE") {
+              return "Product";
+            }
+            else if (text === "wld_trade") {
+              return "World Trade";
+            }
+            else if (text === "cmdCode") {
+              return "HS Code";
+            }
+            else {
+              return text.charAt(0).toUpperCase() + text.substr(1).toLowerCase();
+            }
+
+          }
+        })
         .draw()
   
     })
