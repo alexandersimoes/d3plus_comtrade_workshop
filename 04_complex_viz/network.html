@@ -52,7 +52,7 @@
     {"source": "eta", "target": "gamma"}
   ]
 
-  // instantiate d3plus
+  // solution to step 1 - creating the network
   var visualization = d3plus.viz()
     .container("#viz")  // container DIV to hold the visualization
     .type("network")    // visualization type
@@ -61,7 +61,11 @@
     .edges(connections) // list of node connections
     .size("size")       // key to size the nodes
     .id("name")         // key for which our data is unique on
-    .draw()             // finally, draw the visualization!
   
+  // solution to step 2 - adding arrows
+  visualization.edges({"arrows":true}).draw()
+  
+  // finally, draw the visualization!
+  visualization.draw()
   </script>
 </body>

@@ -43,16 +43,16 @@
 
   // create list of node connections
   var connections = [
-    {"source": "alpha", "target": "beta"},
-    {"source": "alpha", "target": "gamma"},
-    {"source": "beta", "target": "delta"},
-    {"source": "beta", "target": "epsilon"},
-    {"source": "zeta", "target": "gamma"},
-    {"source": "theta", "target": "gamma"},
-    {"source": "eta", "target": "gamma"}
+    {"source": "alpha", "target": "beta", "strength": 1.25},
+    {"source": "alpha", "target": "gamma", "strength": 2.463},
+    {"source": "beta", "target": "delta", "strength": 0.823},
+    {"source": "beta", "target": "epsilon", "strength": 1.563},
+    {"source": "zeta", "target": "gamma", "strength": 3.125},
+    {"source": "theta", "target": "gamma", "strength": 0.732},
+    {"source": "eta", "target": "gamma", "strength": 2.063}
   ]
 
-  // instantiate d3plus
+  // solution to step 1 - creating the rings viz
   var visualization = d3plus.viz()
     .container("#viz")  // container DIV to hold the visualization
     .type("rings")    // visualization type
@@ -62,11 +62,15 @@
     .size("size")       // key to size the nodes
     .id("name")         // key for which our data is unique on
     .focus("alpha")     // set focus ie center node
-    .draw()             // finally, draw the visualization!
   
-  // trying typing the following into your browser's console after page load:
-  //
-  // visualization.size(null).draw();
+  // solution to step 2 - remove node sizing
+  visualization.size(false)
+  
+  // solution to step 3 - adding labels to edges
+  visualization.edges({ "label":"strength" })
+  
+  // finally, draw the visualization!
+  visualization.draw()
   
   </script>
 </body>
