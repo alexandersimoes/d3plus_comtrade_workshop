@@ -27,7 +27,7 @@
     {"value": 1, "name": "zeta"}
   ]
   
-  // instantiate d3plus
+  // step 1 solution - drawing the tree map
   var visualization = d3plus.viz()
     .container("#viz")  // container DIV to hold the visualization
     .data(sample_data)  // data to use with the visualization
@@ -35,7 +35,18 @@
     .id("name")         // key for which our data is unique on
     .size("value")      // sizing of blocks
     .text("name")       // explicitly set text for labels
-    .draw()             // finally, draw the visualization!
+  
+  // // step 2 solution - align labels to top left
+  visualization.labels({"align":"left", "valign": "top"})
+  //
+  // // step 3 solution - change the font
+  visualization.font("serif")
+  //
+  // // step 3 solution - create a title
+  visualization.title("My favorite GREEK letters: ordered by love")
+  //
+  // // finally, draw the visualization!
+  visualization.draw()
   
   </script>
 </body>
