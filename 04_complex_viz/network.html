@@ -1,22 +1,22 @@
 <!doctype html>
 <html>
- 
+
 <head>
   <meta charset="utf-8">
   <title>Complex Visualizations: Network</title>
- 
+
   <!-- load D3js -->
   <script src="/js/d3.js"></script>
-  
+
   <!-- load D3plus after D3js -->
   <script src="/js/d3plus.js"></script>
 </head>
- 
+
 <body>
   <div id="viz"></div>
-  
+
   <script>
-  
+
   // create sample dataset
   var sample_data = [
     {"name": "alpha", "size": 10},
@@ -27,7 +27,7 @@
     {"name": "zeta", "size": 26},
     {"name": "theta", "size": 11},
     {"name": "eta", "size": 24}
-  ]
+  ];
 
   // create list of node positions
   var positions = [
@@ -39,7 +39,7 @@
     {"name": "zeta", "x": 31, "y": 13},
     {"name": "theta", "x": 19, "y": 8},
     {"name": "eta", "x": 24, "y": 11}
-  ]
+  ];
 
   // create list of node connections
   var connections = [
@@ -50,7 +50,7 @@
     {"source": "zeta", "target": "gamma"},
     {"source": "theta", "target": "gamma"},
     {"source": "eta", "target": "gamma"}
-  ]
+  ];
 
   // solution to step 1 - creating the network
   var visualization = d3plus.viz()
@@ -60,12 +60,13 @@
     .nodes(positions)   // x and y position of nodes
     .edges(connections) // list of node connections
     .size("size")       // key to size the nodes
-    .id("name")         // key for which our data is unique on
-  
+    .id("name");        // key for which our data is unique on
+
   // solution to step 2 - adding arrows
-  visualization.edges({"arrows":true}).draw()
-  
+  visualization.edges({"arrows":true});
+
   // finally, draw the visualization!
-  visualization.draw()
+  visualization.draw();
+
   </script>
 </body>

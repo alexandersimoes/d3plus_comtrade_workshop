@@ -1,22 +1,22 @@
 <!doctype html>
 <html>
- 
+
 <head>
   <meta charset="utf-8">
   <title>Single Variable Visualizations: Tree Map</title>
- 
+
   <!-- load D3js -->
   <script src="/js/d3.js"></script>
- 
+
   <!-- load D3plus after D3js -->
   <script src="/js/d3plus.js"></script>
 </head>
- 
+
 <body>
   <div id="viz"></div>
-  
+
   <script>
-    
+
   // sample data array
   var sample_data = [
     {"value": 100, "name": "alpha"},
@@ -26,7 +26,7 @@
     {"value": 5, "name": "epsilon"},
     {"value": 1, "name": "zeta"}
   ]
-  
+
   // step 1 solution - drawing the tree map
   var visualization = d3plus.viz()
     .container("#viz")  // container DIV to hold the visualization
@@ -35,18 +35,18 @@
     .id("name")         // key for which our data is unique on
     .size("value")      // sizing of blocks
     .text("name")       // explicitly set text for labels
-  
+
   // step 2 solution - align labels to top left
   visualization.labels({"align":"left", "valign": "top"})
-  
+
   // step 3 solution - change the font
   visualization.font("serif")
-  
+
   // step 3 solution - create a title
   visualization.title("My favorite GREEK letters: ordered by love")
-  
+
   // finally, draw the visualization!
   visualization.draw()
-  
+
   </script>
 </body>

@@ -1,25 +1,25 @@
 <!doctype html>
 <html>
- 
+
 <head>
   <meta charset="utf-8">
   <title>Complex Visualizations - Geo Map</title>
- 
+
   <!-- load D3js -->
   <script src="/js/d3.js"></script>
-  
+
   <!-- load topojson library -->
   <script src="/js/topojson.js"></script>
-  
+
   <!-- load D3plus after D3js -->
   <script src="/js/d3plus.js"></script>
 </head>
- 
+
 <body>
   <div id="viz"></div>
-  
+
   <script>
-    
+
   // sample data array
   var sample_data = [
     {"value": 2315987123, "country": "nausa", "name": "United States"},
@@ -40,16 +40,20 @@
     .id("country")                 // key for which our data is unique on
     .text("name")                  // key to use for display text
     .color("value")                // key for coloring countries
-    .tooltip("value")              // keys to place in tooltip
-  
+    .tooltip("value");             // keys to place in tooltip
+
   // solution to step 2 - creating a custom color scale
-  visualization.color({ "heatmap": ["darkgreen", "yellow", "red"] });
-  
+  visualization.color({"heatmap": ["darkgreen", "yellow", "red"]});
+
   // solution to step 3 - muting and soloing specific countries
-  // visualization.coords({ "mute":["anata"] });
-  visualization.coords({ "solo":["euesp","euita","eufra","euprt"] });
-  
+  visualization.coords({"mute":["anata"]});
+  visualization.coords({"solo":["euesp", "euita", "eufra", "euprt"]});
+
   // finally, draw the visualization!
-  visualization.draw()
+  visualization.draw();
+
+  // blog post detailing label algorithm
+  // http://d3plus.org/blog/behind-the-scenes/2014/07/08/largest-rect/
+
   </script>
 </body>

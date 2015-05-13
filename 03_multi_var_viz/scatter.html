@@ -1,22 +1,22 @@
 <!doctype html>
 <html>
- 
+
 <head>
   <meta charset="utf-8">
   <title>Multiple Variable Visualizations: Scatter Plot</title>
- 
+
   <!-- load D3js -->
   <script src="/js/d3.js"></script>
- 
+
   <!-- load D3plus after D3js -->
   <script src="/js/d3plus.js"></script>
 </head>
- 
+
 <body>
   <div id="viz"></div>
-  
+
   <script>
-    
+
   // sample data array
   var data = [
     {"year": 1991, "name":"alpha", "value": 15, "parent": "parent 1", "complete":0.8},
@@ -36,7 +36,7 @@
     {"year": 1993, "name":"delta", "value": 17, "parent": "parent 2", "complete":0.2},
     {"year": 1994, "name":"delta", "value": 32, "parent": "parent 2", "complete":0.75}
   ]
-  
+
   // solution to step 1 creating a scatter plot
   var visualization = d3plus.viz()
     .container("#viz")
@@ -45,8 +45,26 @@
     .id("name")
     .x("year")
     .y("value")
-    .time("year")
-    .draw()
-   
+    .time("year");
+
+  // Step 2: Use the "complete" variable to turn your nodes into mini pie charts
+  function bigger_than_half(data_point) {
+
+    return data_point.complete >= 0.5;
+
+  }
+
+  visualization
+    .id(["parent", "name"])
+    .active({
+      "value": bigger_than_half,
+      "spotlight": true
+    });
+
+  // Step 3: Create a custom aggregation for the parent level
+  visualization.aggs({"value": "mean"})
+
+  visualization.draw();
+
   </script>
 </body>

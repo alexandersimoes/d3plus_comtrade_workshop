@@ -1,22 +1,22 @@
 <!doctype html>
 <html>
- 
+
 <head>
   <meta charset="utf-8">
   <title>Complex Visualizations: Rings</title>
- 
+
   <!-- load D3js -->
   <script src="/js/d3.js"></script>
-  
+
   <!-- load D3plus after D3js -->
   <script src="/js/d3plus.js"></script>
 </head>
- 
+
 <body>
   <div id="viz"></div>
-  
+
   <script>
-  
+
   // create sample dataset
   var sample_data = [
     {"name": "alpha", "size": 10},
@@ -62,15 +62,15 @@
     .size("size")       // key to size the nodes
     .id("name")         // key for which our data is unique on
     .focus("alpha")     // set focus ie center node
-  
+
   // solution to step 2 - remove node sizing
   visualization.size(false)
-  
+
   // solution to step 3 - adding labels to edges
-  visualization.edges({ "label":"strength" })
-  
+  visualization.edges({"label": "strength"})
+
   // finally, draw the visualization!
   visualization.draw()
-  
+
   </script>
 </body>
